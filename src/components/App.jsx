@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {                                               // першим аргументом ми передаємо колбек функцію в середині якої є логіка
     localStorage.setItem("my-contacts", JSON.stringify(contacts)) // всередині неї ми робимо логіку ми сохраняємо наші контакти (localStorage.setItem ) , "my-contacts" це назва хриниліща
-  }, [contacts])     // другий аргумент масив змінних, при зміні будь-якого  буде запускатися ефект і виконуватися callback ,тобто щось змінилося в [contacts] запуститьяс 1 функція де запише зміни які відбулися в contactsю
+  }, [contacts])     // другий аргумент масив змінних, при зміні будь-якого  буде запускатися ефект і виконуватися callback ,тобто щось змінилося в [contacts] запуститьяс 1 функція де запише зміни які відбулися в contacts
 
   const isDublication = (name) => {
     const normalizeName = name.toLowerCase()
