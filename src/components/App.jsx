@@ -1,21 +1,22 @@
-import { nanoid } from "nanoid";
-import { useState, useEffect } from "react";
+
+import { useState} from "react";
 
 import Cointeiner from 'components/Cointeiner/Cointeiner';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
 import Filter from 'components/Filter/Filter';
 
+
+import { useSelector, useDispatch} from "react-redux"; // імпортуємо компонент провайдер який дає доступ до глобального стану
+import { addContact , deleteCantacts } from "Redux/action"
+
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const contact = JSON.parse(localStorage.getItem("my-contacts"))
-    return contact ? contact : [];
-  })
+
+  const contacts = useSelector(store=>store.contacts)
+  console.log(contacts)
   const [filter, setFilter] = useState('')
 
-  useEffect(() => {                                               // першим аргументом ми передаємо колбек функцію в середині якої є логіка
-    localStorage.setItem("my-contacts", JSON.stringify(contacts)) // всередині неї ми робимо логіку ми сохраняємо наші контакти (localStorage.setItem ) , "my-contacts" це назва хриниліща
-  }, [contacts])     // другий аргумент масив змінних, при зміні будь-якого  буде запускатися ефект і виконуватися callback ,тобто щось змінилося в [contacts] запуститьяс 1 функція де запише зміни які відбулися в contacts
+  const dispatch= useDispatch()
 
   const isDublication = (name) => {
     const normalizeName = name.toLowerCase()
@@ -25,22 +26,19 @@ const App = () => {
     return Boolean(nameContact)
   }
 
-  const addContact = ({ name, number }) => {
+  const onAddContact = ({ name, number }) => {
     if (isDublication(name)) {
       return alert(`${name} is already in contacts!`)
     }
-    setContacts(prevContacts => {
-      const newContact = {
-        id: nanoid(3),
-        name,
-        number,
-      }
-      return [...prevContacts, newContact]
-    })
+    const action= addContact({ name, number} )
+    dispatch(action)
+   
   }
 
   const deleteContact = id => {
-    setContacts(prevContacts => prevContacts.filter(contact => contact.id !== id))    //повертаються всі книги крім теї на якому висить id на яку ми нажали 
+   const action= deleteCantacts(id)
+   dispatch(action)
+    console.log(action)
   }
 
   const onHendleFilter = ({ target }) => setFilter(target.value)
@@ -57,22 +55,18 @@ const App = () => {
   const filterContacts = getFilteredContact();
 
   return (
-
+     
     <Cointeiner>
       <h2>Phonebook</h2>
-      <ContactForm addContact={addContact} />
+      <ContactForm addContact={onAddContact} />
       <h2>Contacts</h2>
       <Filter onHendleFilter={onHendleFilter} />
       <ContactList contacts={filterContacts} deleteContact={deleteContact} />
     </Cointeiner>
+    
 
   )
 
 }
 export default App
 
-// useEffect(callback, deps) приймає два аргументи:
-// callback - функція, усередині якої виконується вся логіка ефекту. Наприклад, запити на сервер, завдання обробників подій на документ і т.п.
-// залежності - масив змінних, при зміні будь-якого з яких, буде запускатися ефект і виконуватися callback. Це може бути стан, пропси або будь-яке локальне значення всередині компонента.
-// setItem(key, value) – сохранить пару ключ/значение.
-// getItem(key) – получить данные по ключу key.
