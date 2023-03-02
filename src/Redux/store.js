@@ -1,16 +1,16 @@
-import { createStore } from "redux";
-import { devToolsEnhancer } from "@redux-devtools/extension";
-import reducer from "./reducer";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore } from "redux-persist";
 
-const enhancer = devToolsEnhancer();
-
-const store =createStore (reducer , enhancer)  // створюємо глобальне сходище яке називається сторе
-export  default store
+import rootReducer from './root-reducer'
 
 
+export const store = configureStore({
+   reducer: rootReducer
+})
 
-// createStore(reducer, preloadedState, enhancer)
+export const persistor = persistStore(store)
 
-// reducer - функція із логікою зміни стану Redux. Обов'язковий параметр.
-// preloadedState - початковий стан програми. Це має бути об'єкт тієї ж форми, що й, як мінімум, частина стану. Необов'язковий параметр.
-// enhancer - Redux DevTools. для того щоб в бпаузеоі бачити глобальний стан  за допомогою додатка 
+
+
+
+
