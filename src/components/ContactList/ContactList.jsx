@@ -18,7 +18,7 @@ const ContactList=()=>{
   
 	const contactList=contacts.map(({id,name,number})=>
 	<li className={css.contactItem} key={id}>
-	<span className={css.contactSpan}>{name}</span><span className={css.contactSpam}>{number}</span> 
+	<p className={css.contactSpan}>{name}</p><p className={css.contactSpam}>{number}</p> 
 	<button className={css.contactButton} type="button" onClick={()=>deleteContact(id)}>delete</button></li>)
   return(
 	

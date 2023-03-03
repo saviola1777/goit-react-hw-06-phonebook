@@ -1,12 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";  // експортує  футкцію яка буде огортати стор
-import { persistStore } from "redux-persist";      // бібліотека яка запамятовує глобальний стан
-
 import rootReducer from './root-reducer'
+import { configureStore } from "@reduxjs/toolkit";  // експортує  футкцію яка буде огортати стор
+import {persistStore,FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';     
+
+
 
 
 export const store = configureStore({
-   reducer: rootReducer
-})
+   reducer: rootReducer,
+   middleware: getDefaultMiddleware =>
+     getDefaultMiddleware({
+       serializableCheck: {
+         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+       },
+     }),
+ });
 
 export const persistor = persistStore(store)
 

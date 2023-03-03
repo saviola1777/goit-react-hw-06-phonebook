@@ -24,9 +24,8 @@ const isDublication = (name) => {
   const number = e.currentTarget.number.value
   console.log(name ,number)
   if (isDublication(name)) {
-         return alert(`${name} is already in contacts!`)
-      }
-                              
+         return alert(`${name} is already in contacts!`) 
+      }                  
     const action  = addContact({ name, number} )
      dispatch(action)
      e.currentTarget.reset();
