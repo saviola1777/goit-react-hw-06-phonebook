@@ -1,25 +1,38 @@
 import PropTypes from "prop-types";
 import css from "components/ContactForm/ContactForm.module.css"
- import inititalState from 'components/ContactForm/inititalState'  //зберігається обєкт з даними який ми будемо передавати в useState де є name:'' , number:'',
-import { useState } from "react"
+ 
+import { useSelector, useDispatch} from "react-redux";    // імпортуємо компонент провайдер який дає доступ до глобального стану
+import { addContact } from "Redux/Contacts/contacts-slice"
 
-const ContactForm =({addContact})=>{                             //створюємо компонент у вигляді колбек функції куди передаємо проп ({addContact})
-const [state , setState] = useState({...inititalState})          //створюємо Хук useState де state це наш стейт setState метод для зміни стейту useState({...inititalState}) там дані
+const ContactForm =()=>{                    
+const dispatch= useDispatch()
+const contacts = useSelector(store=>store.contacts)
 
- const onHendleChange = ({target})=>{                          //функція при зміні нашого інпуті тобто  те що ми записуємо ({target}) це те саме що e.target обєкт на якому від подія
-  const{name ,value}=target ;                                  //деструктуризація 
-  setState(prevState=>{                                        //зміна нашого стейту де [name] - це назва нашого name в інпуті два інпута з назвою name і number 
-    return {...prevState ,[name]:value}                        //name: значення що ми впишемо в інпут з назвою нейм number:все що впишемо в інпут з назвою намбер
+
+const isDublication = (name) => {
+  const normalizeName = name.toLowerCase()
+  const nameContact = contacts.find(({ name }) => {
+    return (normalizeName === name.toLowerCase())
   })
- }
+  return Boolean(nameContact)
+}
 
- const onHendleSubmit = (e) => {                 
-    e.preventDefault();                          
-    addContact({name ,number})                               //в наш проп передали дані зі стейту тут можна було писати state.name но  нижче провів деструктуризацію
-    setState({...inititalState})
+
+ const onHendleSubmit = (e) => {
+  e.preventDefault();
+  const name = e.currentTarget.name.value
+  const number = e.currentTarget.number.value
+  console.log(name ,number)
+  if (isDublication(name)) {
+         return alert(`${name} is already in contacts!`)
+      }
+                              
+    const action  = addContact({ name, number} )
+     dispatch(action)
+     e.currentTarget.reset();
    }
 
-   const{name ,number}=state                                     //деструктуризуємл щоб в value не писати state.name state.number а просто value={name} value={namber}
+                           
    
     return (
 
@@ -33,8 +46,8 @@ const [state , setState] = useState({...inititalState})          //створю�
               pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
               title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
               required
-              value={name}
-              onChange={onHendleChange}
+              // value={filter}
+              // onChange={onHendleChange}
 
             /> </label>
           <label className={css.name}>Number
@@ -45,8 +58,8 @@ const [state , setState] = useState({...inititalState})          //створю�
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
-              value={number}
-              onChange={onHendleChange}
+              // value={filter}
+              // onChange={onHendleChange}
             />
           </label>
           <button className={css.button} type="submit">Add contact</button>
