@@ -1,40 +1,33 @@
 import css from "components/ContactList/ContactList.module.css";
-import PropTypes from "prop-types";
 
-import { useSelector , useDispatch} from "react-redux";
-import {getFilteredContact} from 'Redux/Contacts/contacts-selector'
+import { useSelector, useDispatch } from "react-redux";
+import { getFilteredContact } from 'Redux/Contacts/contacts-selector'
 import { deleteContacts } from "Redux/Contacts/contacts-slice"
 
-const ContactList=()=>{
+const ContactList = () => {
 
   const contacts = useSelector(getFilteredContact)
-  const dispatch= useDispatch()
+  const dispatch = useDispatch()
+
 
   const deleteContact = id => {
-   const action= deleteContacts(id)
-   dispatch(action)
-    console.log(action)
+    const action = deleteContacts(id)
+    dispatch(action)
+    
   }
-  
-	const contactList=contacts.map(({id,name,number})=>
-	<li className={css.contactItem} key={id}>
-	<p className={css.contactSpan}>{name}</p><p className={css.contactSpam}>{number}</p> 
-	<button className={css.contactButton} type="button" onClick={()=>deleteContact(id)}>delete</button></li>)
-  return(
-	
-	  <ol className={css.contactList}> {contactList}</ol>
-	
-	
+
+  const contactList = contacts.map(({ id, name, number }) =>
+    <li className={css.contactItem} key={id}>
+      <p className={css.contactSpan}>{name}</p><p className={css.contactSpam}>{number}</p>
+      <button className={css.contactButton} type="button" onClick={() => deleteContact(id)}>delete</button></li>)
+      console.log('contactList функція яку перебираємо через map',contactList)
+  return (
+
+    <ol className={css.contactList}>{contactList}</ol>
+
   )
 }
-ContactList.prototype={
-  deleteContact:PropTypes.func.isRequired,
-	contacts:PropTypes.arrayOf(PropTypes.shape({
-		id:PropTypes.string.isRequired ,
-		name:PropTypes.string.isRequired,
-		number:PropTypes.string.isRequired,
-	})),
- }
+
 export default ContactList
 
 

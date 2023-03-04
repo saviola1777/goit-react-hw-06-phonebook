@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+
 import css from "components/ContactForm/ContactForm.module.css"
  
 import { useSelector, useDispatch} from "react-redux";    // імпортуємо компонент провайдер який дає доступ до глобального стану
@@ -46,7 +46,6 @@ const isDublication = (name) => {
               title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
               required
               // value={filter}
-              // onChange={onHendleChange}
 
             /> </label>
           <label className={css.name}>Number
@@ -58,7 +57,6 @@ const isDublication = (name) => {
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
               // value={filter}
-              // onChange={onHendleChange}
             />
           </label>
           <button className={css.button} type="submit">Add contact</button>
@@ -68,9 +66,7 @@ const isDublication = (name) => {
     )
 
 }
-ContactForm.Prototype = {
-  addContact: PropTypes.func.isRequired,
-}
+
 
 export default ContactForm;
 
